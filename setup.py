@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="merklemountainrange.py",
+    name="mmr.py",
     version="0.0.1",
     author="milanthenoob",
     author_email="milan.m.machacek@gmail.com",
