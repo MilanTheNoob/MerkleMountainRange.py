@@ -4,15 +4,14 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="mmr.py",
-    version="0.0.4",
-    author="jjy",
-    author_email="jjyruby@gmail.com",
-    test_suite="tests",
+    name="merklemountainrange.py",
+    version="0.0.1",
+    author="milanthenoob",
+    author_email="milan.m.machacek@gmail.com",
     description="Merkle Mountain Range in python",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/jjyr/mmr.py",
+    url="https://github.com/MilanTheNoob/MerkleMountainRange.py",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
