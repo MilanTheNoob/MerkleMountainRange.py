@@ -3,7 +3,7 @@ Merkle Mountain Range
 """
 
 from typing import List, Tuple, Optional
-import hashlib
+import hashlib, json
 
 
 def tree_pos_height(pos: int) -> int:
@@ -105,6 +105,25 @@ class MMR(object):
         self.last_pos = -1
         self.pos_hash = {}
         self._hasher = hasher
+    
+    def serialize(self) -> str:
+        data = {
+            "last_pos": self.last_pos,
+            "pos_hash": {str(k): v.hex() for k, v in self.pos_hash.items()},
+            "hasher": self._hasher().name,  # e.g. 'blake2b'
+        }
+        return json.dumps(data)
+
+    @classmethod
+    def deserialize(cls, data: str):
+        obj = json.loads(data)
+        # map algorithm name back to hashlib function
+        hasher = getattr(hashlib, obj["hasher"])
+        mmr = cls(hasher=hasher)
+        mmr.last_pos = obj["last_pos"]
+        mmr.pos_hash = {int(k): bytes.fromhex(v)
+                        for k, v in obj["pos_hash"].items()}
+        return mmr
 
     def add(self, elem: bytes) -> int:
         """
@@ -222,6 +241,21 @@ class MerkleProof(object):
         self.mmr_size = mmr_size
         self.proof = proof
         self._hasher = hasher
+
+    def serialize(self) -> str:
+        data = {
+            "mmr_size": self.mmr_size,
+            "proof": [p.hex() for p in self.proof],
+            "hasher": self._hasher().name,
+        }
+        return json.dumps(data)
+
+    @classmethod
+    def deserialize(cls, data: str) -> "MerkleProof":
+        obj = json.loads(data)
+        hasher = getattr(hashlib, obj["hasher"])
+        proof = [bytes.fromhex(p) for p in obj["proof"]]
+        return cls(obj["mmr_size"], proof, hasher)
 
     def verify(self, root: bytes, pos: int, elem: bytes) -> bool:
         """

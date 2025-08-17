@@ -1,14 +1,3 @@
-Stolen from https://github.com/jjyr/mmr.py, a modified Merkle Mountain Range implementation with utility features such as (de)serialization. 
-
-This is to be (or currently is) used for storing livestream "chunks" within the prototype blockchain [Streamchain](github.com/MilanTheNoob/Streamchain)
-
-MIT License applies.
-
----
-
-Observe the below test, we can serialize a basic mountain range and deserialize it, and appropriately check that proofs:
-
-```
 from mmr import MMR, MerkleProof
 
 mmr = MMR()
@@ -31,4 +20,3 @@ assert proof2.verify(mmr2.get_root(), pos1, b"hello")
 assert not proof2.verify(mmr2.get_root(), pos1, b"world")
 
 print(mmr2.serialize())
-```
